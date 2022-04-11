@@ -2,11 +2,6 @@ import requests
 import time
 
 class TwitterClient():
-    def __init__(self):
-        super().__init__()
-        self.WIDTH = 210
-        self.HEIGHT = 297
-
     def __init__(self, token):
         super().__init__()
         self.endpoint = 'https://api.twitter.com/2/tweets/'

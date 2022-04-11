@@ -1,4 +1,6 @@
 python-dotenv
-vaderSentiment
-fpdf
+pandas
 wordcloud
+vaderSentiment
+matplot
+fpdf
