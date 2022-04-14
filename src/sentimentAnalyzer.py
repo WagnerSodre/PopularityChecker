@@ -13,8 +13,12 @@ class SentimentAnalyzer():
         total_score = []
 
         for doc in corpus:
-            scores = sa.polarity_scores(doc)
-            total_score.append(scores['compound'])
+            doc = " ".join(doc.split())
+            try:
+                scores = sa.polarity_scores(str(doc))
+                total_score.append(scores['compound'])
+            except:
+                total_score.append(0.0)
             
         return (sum(total_score) / len(total_score))
 
@@ -24,12 +28,17 @@ class SentimentAnalyzer():
         tweets = []
         res = pd.DataFrame(columns=['date', 'score'])
         for index, row in corpus.iterrows():
-            date = datetime.strptime(row['date'].split('T')[0], "%Y-%m-%d").date()
-            if (date < newest_date):
-                day_score = self.analyzeCorpus(tweets)
-                res = res.append({'date': newest_date, 'score': day_score}, ignore_index=True)
-                newest_date = date
-                tweets = []
-            tweets.append(row['text'])
+            try:
+                date = datetime.strptime(row['date'].split('T')[0], "%Y-%m-%d").date()
+                if (date < newest_date):
+                    day_score = self.analyzeCorpus(tweets)
+                    res = res.append({'date': newest_date, 'score': day_score}, ignore_index=True)
+                    newest_date = date
+                    tweets = []
+                tweets.append(row['text'])
+            except:
+                print('ERROR in line')
+                print(row)
         
         return res
+        

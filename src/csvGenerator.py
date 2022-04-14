@@ -13,12 +13,12 @@ class CSV():
                     hashtags.append(hashtag["text"])
             except:
                 pass
-            tweets_df = tweets_df.append(pd.DataFrame({'user_name': tweet['user']['name'].replace(';', ','), 
-                                                    'user_location': tweet['user']['location'].replace(';', ',') if hasattr(tweet['user'], 'location') else None,
-                                                    'user_description': tweet['user']['description'].replace(';', ','),
+            tweets_df = tweets_df.append(pd.DataFrame({'user_name': " ".join(tweet['user']['name'].replace(';', ',').split()), 
+                                                    'user_location': " ".join(tweet['user']['location'].replace(';', ',').split()) if hasattr(tweet['user'], 'location') else None,
+                                                    'user_description': " ".join(tweet['user']['description'].replace(';', ',').split()),
                                                     'user_verified': tweet['user']['verified'],
                                                     'date': tweet['created_at'].replace(';', ','),
-                                                    'text': tweet['text'].replace(';', ','), 
+                                                    'text': " ".join(tweet['text'].replace(';', ',').split()), 
                                                     'hashtags': [hashtags.replace(';', ',') if hashtags else None],
                                                     'language': tweet['lang'].replace(';', ','),
                                                     'source': tweet['source'].replace(';', ',')}))

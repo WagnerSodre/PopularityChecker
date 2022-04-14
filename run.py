@@ -35,7 +35,9 @@ fname = 'data/tweets.csv'
 if not os.path.isfile(fname):
     tweets = twitter.request('search', request_parameters['topic'], request_parameters['search'])
     csv.generate(tweets, fname)
-tweets_df = pd.read_csv(fname, sep=';', encoding='utf-8', engine='python')
+df = pd.read_csv(fname, sep=';', encoding='utf-8', engine='python')
+
+tweets_df = df.drop_duplicates(subset=['user_name', 'text'])
 
 plts = []
 
@@ -46,8 +48,8 @@ averageNumberOfTweets = int(sum(y) / len(y))
 
 outliers = utils.getOutliers(tweetCount, 'start', 'end', 'tweet_count', averageNumberOfTweets)
 
-filtered_df = tweets_df.loc[tweets_df['language'] == 'en']
-sample = ' '.join(filtered_df['text'])
+filtered_df = tweets_df
+sample = ''.join(str(tweets_df['text']) + ' ')
 
 plts.append(graph.generateWordcloud(sample))
 

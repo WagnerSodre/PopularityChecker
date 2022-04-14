@@ -17,7 +17,7 @@ class Utils():
     def getOutliers(self, arr, xLabel, yLabel, zLabel, average):
         res = []
         for row in arr:
-            if row[zLabel] > average * 3:
+            if row[zLabel] > average * 5:
                 start = datetime.strptime(row[xLabel].split('T')[0], "%Y-%m-%d").date() - timedelta(days=7)
                 end = datetime.strptime(row[yLabel].split('T')[0], "%Y-%m-%d").date() + timedelta(days=7)
                 res.append({"start": start.strftime('%Y-%m-%dT%H:%M:%S.%fZ'), "end": end.strftime('%Y-%m-%dT%H:%M:%S.%fZ')})
@@ -31,3 +31,4 @@ class Utils():
     def chunks(self, lst, n):
         for i in range(0, len(lst), n):
             yield lst[i:i + n]
+            

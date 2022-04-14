@@ -44,6 +44,8 @@ class Graph():
     def generateWordcloud(self, arr, startDate=None, endDate=None):
         path =  'data/tmp/' + str(self.n) + '.png'
         arr = arr.replace('https://t.co', '')
+        arr = arr.replace('RT', '')
+        arr = arr.replace('DM', '')
         wordcloud = WordCloud(width= 3000, height = 1000, random_state=1, background_color='salmon', colormap='Pastel1', collocations=False, stopwords = STOPWORDS).generate(arr)
         plt.figure(figsize=(12, 4))
         plt.imshow(wordcloud) 
