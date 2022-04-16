@@ -1,6 +1,7 @@
 python-dotenv
 pandas
 wordcloud
-vader-multi
+translatte
+vaderSentiment
 matplot
 fpdf
