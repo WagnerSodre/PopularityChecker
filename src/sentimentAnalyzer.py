@@ -13,12 +13,8 @@ class SentimentAnalyzer():
         total_score = []
 
         for doc in corpus:
-            doc = " ".join(doc.split())
-            try:
-                scores = sa.polarity_scores(str(doc))
-                total_score.append(scores['compound'])
-            except:
-                total_score.append(0.0)
+            scores = sa.polarity_scores(str(doc))
+            total_score.append(scores['compound'])
             
         return (sum(total_score) / len(total_score))
 
