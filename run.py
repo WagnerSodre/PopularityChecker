@@ -11,6 +11,7 @@ from src.pdfGenerator import PDF
 from src.graphGenerator import Graph
 from src.sentimentAnalyzer import SentimentAnalyzer
 
+from translatte import Translator
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -48,19 +49,26 @@ averageNumberOfTweets = int(sum(y) / len(y))
 
 outliers = utils.getOutliers(tweetCount, 'start', 'end', 'tweet_count', averageNumberOfTweets)
 
-filtered_df = tweets_df
-sample = ''.join(str(tweets_df['text']) + ' ')
+translated_df = tweets_df
+for idx, row in tweets_df.iterrows():
+    try:
+        translated_df.loc[idx,'text'] = str(Translator.translate(translated_df.loc[idx,'text'], 'en'))
+        print(translated_df.loc[idx,'text'])
+    except:
+        print('ERROR WITH: ', translated_df.loc[idx,'text'])
+
+sample = ' '.join(translated_df['text'])
 
 plts.append(graph.generateWordcloud(sample))
 
 plts.append(graph.generateLineGraph(x, y, 'tweetTimeline'))
 
-sentimentByDate = sentimentAnalyzer.sentimentByDate(filtered_df[['text', 'date']])
+sentimentByDate = sentimentAnalyzer.sentimentByDate(translated_df[['text', 'date']])
 
 plts.append(graph.generateLineGraph(sentimentByDate['date'], sentimentByDate['score'], 'sentimentTimeline'))
 
 for outlier in outliers:
-    outlier_data = filtered_df.loc[(filtered_df['date'] > outlier['start']) & (filtered_df['date'] < outlier['end'])]
+    outlier_data = translated_df.loc[(translated_df['date'] > outlier['start']) & (translated_df['date'] < outlier['end'])]
     outlier_x, outlier_y = utils.filterTweetCount(tweetCount, outlier)
 
     sample = ' '.join(outlier_data['text'])
@@ -73,7 +81,7 @@ for outlier in outliers:
 
     plts.append(graph.generateLineGraph(sentimentByDate['date'], sentimentByDate['score'], 'sentimentTimeline', outlier['start'].split('T')[0], outlier['end'].split('T')[0]))
 
-print('Average Sentiment: ', sentimentAnalyzer.analyzeCorpus(filtered_df['text']))
+print('Average Sentiment: ', sentimentAnalyzer.analyzeCorpus(translated_df['text']))
 
 pdf.print_images(plts)
 pdf.output()
